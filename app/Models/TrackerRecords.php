@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrackerRecords extends Model
 {
-    //
+    // указываем, что ID здесь не числовой и не автоинкрементный
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $fillable = [
+        'id', 'user_id', 'mode', 'date_key', 'description',
+        'val1', 'val2', 'val3', 'weight', 'is_completed', 'sort_order'
+    ];
 }
