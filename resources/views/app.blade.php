@@ -4,7 +4,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <meta name="theme-color" content="#FFFDF5">
+        <link rel="manifest" href="/manifest.json">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js');
+                });
+            }
+        </script>
+
+        <title inertia>{{ config('app.name', 'GymNote') }}</title>
 
         <!-- Fonts -->
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">

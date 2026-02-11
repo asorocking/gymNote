@@ -14,21 +14,20 @@ class TrackerController extends Controller
         // Get date from request or current
         $date = $request->input('date', now()->format('Y-m-d'));
 
-        return Inertia::render('Dashboard', [
-           'initialRecords' => TrackerRecord::where('user_id', auth()->id())
-                ->where('date_key', $date)
+        return Inertia::render('gymNote', [
+           'initialRecords' => TrackerRecord::where('date_key', $date)
                 ->orderBy('created_at', 'desc')
                 ->get(),
-            'settings' => UserSetting::where('user_id', auth()->id())->first()?->settings,
+            'settings' => UserSetting::first()?->settings ?? [],
             'current_day' => $date
         ]);
     }
 
     public function update(Request $request, TrackerRecord $record)
     {
-        if ($record->user_id != auth()->id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+//        if ($record->user_id != auth()->id()) {
+//            return response()->json(['error' => 'Unauthorized'], 403);
+//        }
 
         $record->update($request->only([
             'val1', 'val2', 'val3', 'weight', 'description', 'notes', 'is_completed'
@@ -42,7 +41,6 @@ class TrackerController extends Controller
         // Важно: берем дату, которую прислал фронт
         $record = \App\Models\TrackerRecord::create([
             'id' => (string)(microtime(true) * 10000),
-            'user_id' => auth()->id(),
             'mode' => $request->mode,
             'date_key' => $request->input('date_key') ?: now()->format('Y-m-d'),
             'description' => '',
@@ -57,9 +55,8 @@ class TrackerController extends Controller
 
     public function destroy(\App\Models\TrackerRecord $record)
     {
-        if ($record->user_id === auth()->id()) {
-            $record->delete();
-        }
+        $record->delete();
+
         return back();
     }
 
@@ -75,7 +72,6 @@ class TrackerController extends Controller
 
         // 1. Сохраняем настройки (Реестры)
         UserSetting::updateOrCreate(
-            ['user_id' => auth()->id()],
             ['settings' => [
                 'exerciseRegistry' => $data['exerciseRegistry'] ?? [],
                 'shopListRegistry' => $data['shopListRegistry'] ?? [],
@@ -88,7 +84,6 @@ class TrackerController extends Controller
             TrackerRecord::updateOrCreate(
                 ['id' => (string)$record['id']], // Принудительно к строке
                 [
-                    'user_id' => auth()->id(),
                     'mode' => $record['mode'] ?? 'gym',
                     'date_key' => $record['dateKey'],
                     'description' => $record['description'] ?? '',

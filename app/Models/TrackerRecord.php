@@ -11,7 +11,7 @@ class TrackerRecord extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'id', 'user_id', 'mode', 'date_key', 'description', 'notes',
+        'id', 'mode', 'date_key', 'description', 'notes',
         'val1', 'val2', 'val3', 'weight', 'is_completed', 'sort_order'
     ];
 }
