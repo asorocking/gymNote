@@ -28,5 +28,13 @@ Route::middleware('auth')->group(function () {
 Route::post('/import', [TrackerController::class, 'import'])
     ->middleware(['auth', 'verified'])
     ->name('import');
+Route::get('/dashboard', [TrackerController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+Route::patch('/records/{record}', [TrackerController::class, 'update'])->name('records.update');
+Route::post('/records', [TrackerController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('records.store');
+Route::delete('/records/{record}', [TrackerController::class, 'destroy'])->name('records.destroy');
 
 require __DIR__.'/auth.php';

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('user_settings')) {
-            Schema::create('user_settings', function (Blueprint $table) {
-                $table->id();
-                $table->timestamps();
-            });
-        }
+        Schema::table('tracker_records', function(Blueprint $table) {
+           $table->text('notes')->nullable()->after('description');
+        });
     }
 
     /**
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_settings');
+        Schema::table('tracker_records', function (Blueprint $table) {
+            //
+        });
     }
 };
